@@ -3,6 +3,11 @@ import { createDefaultImageryProvider } from './imagery'
 import type { ViewerHandle } from './types'
 
 export function initializeViewer(container: HTMLElement): ViewerHandle {
+  const imageryProvider = createDefaultImageryProvider()
+  const baseLayer = new Cesium.ImageryLayer(imageryProvider, {
+    show: true,
+  })
+
   const viewer = new Cesium.Viewer(container, {
     animation: false,
     timeline: false,
@@ -15,13 +20,23 @@ export function initializeViewer(container: HTMLElement): ViewerHandle {
     vrButton: false,
     infoBox: false,
     selectionIndicator: false,
-    imageryProvider: createDefaultImageryProvider(),
+    baseLayer,
   })
 
   viewer.scene.postProcessStages.fxaa.enabled = true
   viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a0f16')
   viewer.scene.useBrowserRecommendedResolution = false
-  viewer.resolutionScale = Math.min(2, Math.max(1, window.devicePixelRatio * 2))
+  viewer.resolutionScale = Math.min(2, Math.max(1, window.devicePixelRatio * 1.5))
+  viewer.scene.globe.maximumScreenSpaceError = 1.5
+  if (viewer.scene.context.msaaSupported) {
+    viewer.scene.msaaSamples = 4
+  }
+
+  baseLayer.brightness = 0.78
+  baseLayer.contrast = 1.32
+  baseLayer.saturation = 0.55
+  baseLayer.gamma = 1.08
+  baseLayer.hue = -0.03
 
   const handle: ViewerHandle = {
     viewer,

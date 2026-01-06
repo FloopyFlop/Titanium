@@ -4,6 +4,8 @@ import type { ViewerHandle } from './types'
 export function createDefaultImageryProvider() {
   return new Cesium.OpenStreetMapImageryProvider({
     url: 'https://tile.openstreetmap.org/',
+    credit: '© OpenStreetMap contributors',
+    maximumLevel: 19,
   })
 }
 

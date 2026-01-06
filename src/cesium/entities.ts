@@ -10,15 +10,15 @@ type RoutePoint = {
 }
 
 const LEAD_ROUTE: RoutePoint[] = [
-  { seconds: 0, lat: 37.8085, lon: -122.475, alt: 2200 },
-  { seconds: 70, lat: 37.832, lon: -122.356, alt: 2600 },
-  { seconds: 140, lat: 37.803, lon: -122.271, alt: 2800 },
-  { seconds: 210, lat: 37.742, lon: -122.214, alt: 2400 },
-  { seconds: 280, lat: 37.621, lon: -122.379, alt: 2100 },
-  { seconds: 350, lat: 37.64, lon: -122.45, alt: 2300 },
-  { seconds: 430, lat: 37.707, lon: -122.52, alt: 2200 },
-  { seconds: 520, lat: 37.79, lon: -122.52, alt: 2500 },
-  { seconds: 600, lat: 37.8085, lon: -122.475, alt: 2200 },
+  { seconds: 0, lat: 25.033, lon: 121.5654, alt: 2300 },
+  { seconds: 70, lat: 25.061, lon: 121.57, alt: 2600 },
+  { seconds: 140, lat: 25.076, lon: 121.52, alt: 2500 },
+  { seconds: 210, lat: 25.046, lon: 121.48, alt: 2400 },
+  { seconds: 280, lat: 25.012, lon: 121.505, alt: 2200 },
+  { seconds: 350, lat: 25.015, lon: 121.58, alt: 2400 },
+  { seconds: 430, lat: 25.06, lon: 121.62, alt: 2700 },
+  { seconds: 520, lat: 25.075, lon: 121.59, alt: 2500 },
+  { seconds: 600, lat: 25.033, lon: 121.5654, alt: 2300 },
 ]
 
 const WING_ROUTE: RoutePoint[] = LEAD_ROUTE.map((point, index) => ({
@@ -29,15 +29,15 @@ const WING_ROUTE: RoutePoint[] = LEAD_ROUTE.map((point, index) => ({
 }))
 
 const BASE_STATION = {
-  lat: 37.7749,
-  lon: -122.4194,
+  lat: 25.033,
+  lon: 121.5654,
   alt: 0,
 }
 
 const SIGNAL_NODES = [
-  { lat: 37.789, lon: -122.39, alt: 0, label: 'NODE-01' },
-  { lat: 37.74, lon: -122.435, alt: 0, label: 'NODE-02' },
-  { lat: 37.81, lon: -122.415, alt: 0, label: 'NODE-03' },
+  { lat: 25.052, lon: 121.52, alt: 0, label: 'NODE-01' },
+  { lat: 25.023, lon: 121.49, alt: 0, label: 'NODE-02' },
+  { lat: 25.072, lon: 121.59, alt: 0, label: 'NODE-03' },
 ]
 
 const leadMarkerColor = '#7ce7ff'
@@ -191,7 +191,7 @@ export function loadDemoTrack(handle: ViewerHandle) {
       material: new Cesium.ColorMaterialProperty(pulseColor),
       outline: true,
       outlineColor: ringColor.withAlpha(0.6),
-      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+      height: 0,
     },
   })
 
