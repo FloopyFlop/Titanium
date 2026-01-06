@@ -7,6 +7,8 @@ A sleek UI + visual layer for Cesium.js.
 - Minimal Titanium playback controls (play/pause, speed, jump, rewind/fast-forward)
 - Timeline scrubber with time readout
 - Optional track-entity camera follow
+- Scene mode toggle (3D / 2D / 2.5D)
+- Stylized rendering toggles (toon + edge)
 
 ## Local development
 ```bash

@@ -64,6 +64,25 @@ export function SkipEndIcon(props: SVGProps<SVGSVGElement>) {
   )
 }
 
+export function HomeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 11.5 12 5l8 6.5" />
+      <path d="M6.5 10.5v7.5h11v-7.5" />
+    </svg>
+  )
+}
+
+export function NorthIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 4l4 8h-8l4-8z" fill="currentColor" stroke="none" />
+      <line x1="12" y1="12" x2="12" y2="20" />
+      <path d="M9.5 20h5" />
+    </svg>
+  )
+}
+
 export function TargetIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>

@@ -1,15 +1,7 @@
 import type { CSSProperties } from 'react'
 import { IconButton } from '../components/IconButton'
 import { Panel } from '../components/Panel'
-import {
-  FastForwardIcon,
-  PauseIcon,
-  PlayIcon,
-  RewindIcon,
-  SkipEndIcon,
-  SkipStartIcon,
-  TargetIcon,
-} from '../icons'
+import { FastForwardIcon, PauseIcon, PlayIcon, RewindIcon, SkipEndIcon, SkipStartIcon } from '../icons'
 
 const SPEED_OPTIONS = [0.5, 1, 2, 5, 10, 20]
 
@@ -17,14 +9,12 @@ type PlaybackControlsProps = {
   disabled?: boolean
   isPlaying: boolean
   speed: number
-  isTracking: boolean
   onTogglePlay: () => void
   onJumpStart: () => void
   onJumpEnd: () => void
   onNudgeBackward: () => void
   onNudgeForward: () => void
   onSpeedChange: (value: number) => void
-  onToggleTrack: () => void
   className?: string
   style?: CSSProperties
 }
@@ -33,14 +23,12 @@ export function PlaybackControls({
   disabled,
   isPlaying,
   speed,
-  isTracking,
   onTogglePlay,
   onJumpStart,
   onJumpEnd,
   onNudgeBackward,
   onNudgeForward,
   onSpeedChange,
-  onToggleTrack,
   className,
   style,
 }: PlaybackControlsProps) {
@@ -97,14 +85,6 @@ export function PlaybackControls({
           ))}
         </select>
       </div>
-
-      <IconButton
-        icon={<TargetIcon />}
-        label={isTracking ? 'Disable tracking' : 'Track entity'}
-        onClick={onToggleTrack}
-        tone={isTracking ? 'primary' : 'ghost'}
-        disabled={disabled}
-      />
     </Panel>
   )
 }

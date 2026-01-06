@@ -1,4 +1,4 @@
-import type { Entity, JulianDate, PostProcessStageComposite, Viewer } from 'cesium'
+import type { Entity, JulianDate, PostProcessStage, Viewer } from 'cesium'
 
 export type ViewerHandle = {
   viewer: Viewer
@@ -6,13 +6,17 @@ export type ViewerHandle = {
     demoEntity?: Entity
   }
   stages: {
-    stylize?: PostProcessStageComposite | null
+    stylize?: {
+      edge: PostProcessStage
+      toon: PostProcessStage
+    } | null
   }
   config: {
     clock: {
       start?: JulianDate
       stop?: JulianDate
     }
+    stylization?: StylizationConfig
   }
 }
 
@@ -35,4 +39,12 @@ export type SceneMode = '3D' | '2D' | 'COLUMBUS'
 
 export type StylizationConfig = {
   enabled: boolean
+  edge: {
+    enabled: boolean
+    threshold: number
+  }
+  toon: {
+    enabled: boolean
+    intensity: number
+  }
 }
