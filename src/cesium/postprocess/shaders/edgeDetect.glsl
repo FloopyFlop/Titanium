@@ -32,7 +32,8 @@ void main() {
   float edge = smoothstep(edgeThreshold, edgeThreshold + 0.2, g);
 
   vec3 base = texture(colorTexture, v_textureCoordinates).rgb;
-  vec3 mixed = mix(base, edgeColor.rgb, edge);
+  vec3 edgeTint = base * edgeColor.rgb;
+  vec3 mixed = mix(base, edgeTint, edge);
 
   out_FragColor = vec4(mixed, 1.0);
 }

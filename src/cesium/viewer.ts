@@ -20,6 +20,8 @@ export function initializeViewer(container: HTMLElement): ViewerHandle {
 
   viewer.scene.postProcessStages.fxaa.enabled = true
   viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a0f16')
+  viewer.scene.useBrowserRecommendedResolution = false
+  viewer.resolutionScale = Math.min(2, Math.max(1, window.devicePixelRatio * 2))
 
   const handle: ViewerHandle = {
     viewer,

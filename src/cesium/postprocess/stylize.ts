@@ -3,7 +3,7 @@ import type { StylizationConfig, ViewerHandle } from '../types'
 import edgeDetectShader from './shaders/edgeDetect.glsl?raw'
 import toonShader from './shaders/celShading.glsl?raw'
 
-const DEFAULT_EDGE_COLOR = Cesium.Color.fromCssColorString('#7ce7ff')
+const DEFAULT_EDGE_COLOR = new Cesium.Color(0.35, 0.35, 0.35, 1.0)
 
 function ensureStages(handle: ViewerHandle) {
   if (handle.stages.stylize) {
