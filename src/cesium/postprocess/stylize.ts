@@ -3,7 +3,7 @@ import type { StylizationConfig, ViewerHandle } from '../types'
 import edgeDetectShader from './shaders/edgeDetect.glsl?raw'
 import toonShader from './shaders/celShading.glsl?raw'
 
-const DEFAULT_EDGE_COLOR = new Cesium.Color(0.35, 0.35, 0.35, 1.0)
+const DEFAULT_EDGE_COLOR = new Cesium.Color(1.35, 1.35, 1.35, 1.0)
 
 function ensureStages(handle: ViewerHandle) {
   if (handle.stages.stylize) {
@@ -23,8 +23,8 @@ function ensureStages(handle: ViewerHandle) {
     name: 'titanium-edge',
     fragmentShader: edgeDetectShader,
     uniforms: {
-      edgeThreshold: 0.22,
-      edgeStrength: 3.0,
+      edgeThreshold: 0.18,
+      edgeStrength: 3.6,
       edgeStep: 1.0,
       edgeColor: DEFAULT_EDGE_COLOR,
     },

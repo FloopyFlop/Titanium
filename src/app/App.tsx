@@ -35,11 +35,11 @@ const defaultStylization: StylizationConfig = {
   enabled: true,
   edge: {
     enabled: true,
-    threshold: 0.22,
+    threshold: 0.18,
   },
   toon: {
     enabled: true,
-    intensity: 0.7,
+    intensity: 0.75,
   },
 }
 
