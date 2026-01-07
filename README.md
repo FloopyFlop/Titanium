@@ -5,8 +5,8 @@ A sleek UI + visual layer for Cesium.js.
 ## Demo highlights
 - Blue vs red/orange air activity with mixed solid and dotted trails
 - Multiple base stations with pulsing rings and rotating radar sweeps
-- Multi-missile launches with impact bursts and a mid-air intercept
-- Ground convoys, launchers, and a coastal ship fleet
+- Multi-missile launches with impact bursts and mid-air intercepts
+- Ground convoys, launchers, and blue/enemy ship fleets
 - Minimal Titanium playback + scene controls
 - Enemy palette selector (red/orange) in the Visuals panel
 

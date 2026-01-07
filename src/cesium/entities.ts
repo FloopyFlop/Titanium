@@ -74,16 +74,16 @@ const MISSILE_ROUTE: RoutePoint[] = [
 ]
 
 const MISSILE_ROUTE_2: RoutePoint[] = [
-  { seconds: 240, lat: 25.145, lon: 121.35, alt: 0 },
-  { seconds: 255, lat: 25.11, lon: 121.45, alt: 900 },
-  { seconds: 265, lat: 25.08, lon: 121.54, alt: 1500 },
-  { seconds: 270, lat: 25.06, lon: 121.6, alt: 1300 },
+  { seconds: 240, lat: 25.115, lon: 121.42, alt: 0 },
+  { seconds: 255, lat: 25.1, lon: 121.48, alt: 900 },
+  { seconds: 265, lat: 25.08, lon: 121.55, alt: 1500 },
+  { seconds: 270, lat: 25.06, lon: 121.63, alt: 1300 },
 ]
 
 const INTERCEPT_ROUTE_1: RoutePoint[] = [
   { seconds: 258, lat: 25.02, lon: 121.72, alt: 0 },
   { seconds: 266, lat: 25.04, lon: 121.67, alt: 900 },
-  { seconds: 270, lat: 25.06, lon: 121.6, alt: 1300 },
+  { seconds: 270, lat: 25.06, lon: 121.63, alt: 1300 },
 ]
 
 const MISSILE_ROUTE_3: RoutePoint[] = [
@@ -94,22 +94,61 @@ const MISSILE_ROUTE_3: RoutePoint[] = [
   { seconds: 395, lat: 24.96, lon: 121.55, alt: 150 },
 ]
 
+const MISSILE_ROUTE_4: RoutePoint[] = [
+  { seconds: 420, lat: 25.115, lon: 121.42, alt: 0 },
+  { seconds: 438, lat: 25.1, lon: 121.48, alt: 800 },
+  { seconds: 450, lat: 25.08, lon: 121.56, alt: 1300 },
+  { seconds: 462, lat: 25.05, lon: 121.63, alt: 1400 },
+]
+
+const INTERCEPT_ROUTE_2: RoutePoint[] = [
+  { seconds: 448, lat: 25.02, lon: 121.72, alt: 0 },
+  { seconds: 456, lat: 25.035, lon: 121.68, alt: 900 },
+  { seconds: 462, lat: 25.05, lon: 121.63, alt: 1400 },
+]
+
+const MISSILE_ROUTE_5: RoutePoint[] = [
+  { seconds: 520, lat: 25.04, lon: 120.9, alt: 0 },
+  { seconds: 534, lat: 25.02, lon: 121.1, alt: 700 },
+  { seconds: 548, lat: 24.99, lon: 121.32, alt: 1100 },
+  { seconds: 565, lat: 25.02, lon: 121.72, alt: 150 },
+]
+
+const BLUE_MISSILE_ROUTE_1: RoutePoint[] = [
+  { seconds: 500, lat: 25.02, lon: 121.72, alt: 0 },
+  { seconds: 512, lat: 25.05, lon: 121.5, alt: 900 },
+  { seconds: 528, lat: 25.08, lon: 121.2, alt: 1100 },
+  { seconds: 542, lat: 25.1, lon: 120.95, alt: 150 },
+]
+
 const SHIP_ROUTE_ALPHA: RoutePoint[] = [
-  { seconds: 0, lat: 25.02, lon: 121.72, alt: 0 },
-  { seconds: 180, lat: 25.05, lon: 121.78, alt: 0 },
-  { seconds: 360, lat: 25.08, lon: 121.82, alt: 0 },
+  { seconds: 0, lat: 25.02, lon: 121.86, alt: 8 },
+  { seconds: 180, lat: 25.05, lon: 121.9, alt: 8 },
+  { seconds: 360, lat: 25.08, lon: 121.94, alt: 8 },
 ]
 
 const SHIP_ROUTE_BRAVO: RoutePoint[] = [
-  { seconds: 40, lat: 24.98, lon: 121.7, alt: 0 },
-  { seconds: 220, lat: 25.0, lon: 121.76, alt: 0 },
-  { seconds: 400, lat: 25.02, lon: 121.8, alt: 0 },
+  { seconds: 40, lat: 24.98, lon: 121.84, alt: 8 },
+  { seconds: 220, lat: 25.0, lon: 121.88, alt: 8 },
+  { seconds: 400, lat: 25.02, lon: 121.92, alt: 8 },
 ]
 
 const SHIP_ROUTE_CHARLIE: RoutePoint[] = [
-  { seconds: 80, lat: 25.11, lon: 121.68, alt: 0 },
-  { seconds: 260, lat: 25.13, lon: 121.73, alt: 0 },
-  { seconds: 440, lat: 25.15, lon: 121.78, alt: 0 },
+  { seconds: 80, lat: 25.1, lon: 121.88, alt: 8 },
+  { seconds: 260, lat: 25.12, lon: 121.92, alt: 8 },
+  { seconds: 440, lat: 25.14, lon: 121.96, alt: 8 },
+]
+
+const RED_SHIP_ROUTE_ALPHA: RoutePoint[] = [
+  { seconds: 0, lat: 25.08, lon: 122.02, alt: 8 },
+  { seconds: 180, lat: 25.06, lon: 121.98, alt: 8 },
+  { seconds: 360, lat: 25.04, lon: 121.94, alt: 8 },
+]
+
+const RED_SHIP_ROUTE_BRAVO: RoutePoint[] = [
+  { seconds: 40, lat: 25.0, lon: 122.0, alt: 8 },
+  { seconds: 220, lat: 25.02, lon: 121.96, alt: 8 },
+  { seconds: 400, lat: 25.04, lon: 121.92, alt: 8 },
 ]
 
 const SCENARIO_ROUTES: RoutePoint[][] = [
@@ -123,9 +162,15 @@ const SCENARIO_ROUTES: RoutePoint[][] = [
   MISSILE_ROUTE_2,
   INTERCEPT_ROUTE_1,
   MISSILE_ROUTE_3,
+  MISSILE_ROUTE_4,
+  INTERCEPT_ROUTE_2,
+  MISSILE_ROUTE_5,
+  BLUE_MISSILE_ROUTE_1,
   SHIP_ROUTE_ALPHA,
   SHIP_ROUTE_BRAVO,
   SHIP_ROUTE_CHARLIE,
+  RED_SHIP_ROUTE_ALPHA,
+  RED_SHIP_ROUTE_BRAVO,
 ]
 
 const BLUE_BASE = {
@@ -153,8 +198,8 @@ const BLUE_BASE_SOUTH = {
 }
 
 const RED_BASE_WEST = {
-  lat: 25.145,
-  lon: 121.35,
+  lat: 25.115,
+  lon: 121.42,
   alt: 0,
 }
 
@@ -184,14 +229,14 @@ const SCENARIO_ANCHORS = [
   { lat: 25.082, lon: 121.46 },
   { lat: 25.032, lon: 121.705 },
   { lat: 24.975, lon: 121.545 },
-  { lat: 25.15, lon: 121.355 },
-  { lat: 25.12, lon: 121.33 },
+  { lat: 25.13, lon: 121.405 },
+  { lat: 25.105, lon: 121.39 },
   { lat: 25.088, lon: 121.482 },
   { lat: 25.095, lon: 121.498 },
   { lat: 25.02, lon: 121.548 },
   { lat: 25.015, lon: 121.715 },
   { lat: 24.95, lon: 121.55 },
-  { lat: 25.14, lon: 121.36 },
+  { lat: 25.12, lon: 121.41 },
 ]
 
 const markerStroke = '#0b111b'
@@ -616,7 +661,22 @@ const addShip = (
     ]),
     position,
     orientation: new Cesium.VelocityOrientationProperty(position),
-    point: createPoint(options.color, 6, 5000000),
+    box: {
+      dimensions: new Cesium.Cartesian3(140, 28, 16),
+      material: options.color.withAlpha(0.85),
+      outline: true,
+      outlineColor: labelStroke,
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 6000000),
+    },
+    cylinder: {
+      length: 20,
+      topRadius: 1.5,
+      bottomRadius: 2.8,
+      material: options.color.withAlpha(0.9),
+      outline: true,
+      outlineColor: labelStroke,
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 6000000),
+    },
     label: {
       text: options.label,
       font: '10px "Space Grotesk"',
@@ -780,6 +840,10 @@ export function loadDemoTrack(handle: ViewerHandle) {
   const missilePosition2 = buildPositionProperty(MISSILE_ROUTE_2, start)
   const interceptPosition1 = buildPositionProperty(INTERCEPT_ROUTE_1, start)
   const missilePosition3 = buildPositionProperty(MISSILE_ROUTE_3, start)
+  const missilePosition4 = buildPositionProperty(MISSILE_ROUTE_4, start)
+  const interceptPosition2 = buildPositionProperty(INTERCEPT_ROUTE_2, start)
+  const missilePosition5 = buildPositionProperty(MISSILE_ROUTE_5, start)
+  const blueMissilePosition1 = buildPositionProperty(BLUE_MISSILE_ROUTE_1, start)
 
   const availability = new Cesium.TimeIntervalCollection([
     new Cesium.TimeInterval({
@@ -1068,6 +1132,178 @@ export function loadDemoTrack(handle: ViewerHandle) {
     },
   })
 
+  const missileStart4 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteStart(MISSILE_ROUTE_4),
+    new Cesium.JulianDate(),
+  )
+  const missileStop4 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteEnd(MISSILE_ROUTE_4),
+    new Cesium.JulianDate(),
+  )
+
+  handle.viewer.entities.add({
+    id: 'titanium-missile-4',
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start: missileStart4,
+        stop: missileStop4,
+      }),
+    ]),
+    position: missilePosition4,
+    orientation: new Cesium.VelocityOrientationProperty(missilePosition4),
+    point: createPoint(missileColor, 6, 2500000),
+    label: createFlightLabel(
+      'M4 | TALON',
+      '11px "Space Grotesk"',
+      missileColor,
+      new Cesium.Cartesian2(10, -10),
+      0.45,
+      2500000,
+      new Cesium.NearFarScalar(1000, 0.85, 2000000, 0.55),
+    ),
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.6,
+        color: missileColor,
+      }),
+      width: 2.5,
+      leadTime: 0,
+      trailTime: 40,
+    },
+  })
+
+  const interceptStart2 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteStart(INTERCEPT_ROUTE_2),
+    new Cesium.JulianDate(),
+  )
+  const interceptStop2 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteEnd(INTERCEPT_ROUTE_2),
+    new Cesium.JulianDate(),
+  )
+
+  handle.viewer.entities.add({
+    id: 'titanium-interceptor-2',
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start: interceptStart2,
+        stop: interceptStop2,
+      }),
+    ]),
+    position: interceptPosition2,
+    orientation: new Cesium.VelocityOrientationProperty(interceptPosition2),
+    point: createPoint(blueMissileColor, 6, 2500000),
+    label: createFlightLabel(
+      'I2 | SHIELD',
+      '11px "Space Grotesk"',
+      blueMissileColor,
+      new Cesium.Cartesian2(10, -10),
+      0.45,
+      2500000,
+      new Cesium.NearFarScalar(1000, 0.85, 2000000, 0.55),
+    ),
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.65,
+        color: blueMissileColor,
+      }),
+      width: 2.5,
+      leadTime: 0,
+      trailTime: 34,
+    },
+  })
+
+  const missileStart5 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteStart(MISSILE_ROUTE_5),
+    new Cesium.JulianDate(),
+  )
+  const missileStop5 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteEnd(MISSILE_ROUTE_5),
+    new Cesium.JulianDate(),
+  )
+
+  handle.viewer.entities.add({
+    id: 'titanium-missile-5',
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start: missileStart5,
+        stop: missileStop5,
+      }),
+    ]),
+    position: missilePosition5,
+    orientation: new Cesium.VelocityOrientationProperty(missilePosition5),
+    point: createPoint(missileColor, 6, 2500000),
+    label: createFlightLabel(
+      'M5 | SEAROCKET',
+      '11px "Space Grotesk"',
+      missileColor,
+      new Cesium.Cartesian2(10, -10),
+      0.45,
+      2500000,
+      new Cesium.NearFarScalar(1000, 0.85, 2000000, 0.55),
+    ),
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.6,
+        color: missileColor,
+      }),
+      width: 2.5,
+      leadTime: 0,
+      trailTime: 44,
+    },
+  })
+
+  const blueMissileStart1 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteStart(BLUE_MISSILE_ROUTE_1),
+    new Cesium.JulianDate(),
+  )
+  const blueMissileStop1 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteEnd(BLUE_MISSILE_ROUTE_1),
+    new Cesium.JulianDate(),
+  )
+
+  handle.viewer.entities.add({
+    id: 'titanium-blue-missile-1',
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start: blueMissileStart1,
+        stop: blueMissileStop1,
+      }),
+    ]),
+    position: blueMissilePosition1,
+    orientation: new Cesium.VelocityOrientationProperty(blueMissilePosition1),
+    point: createPoint(blueMissileColor, 6, 2500000),
+    label: createFlightLabel(
+      'B1 | CUTLASS',
+      '11px "Space Grotesk"',
+      blueMissileColor,
+      new Cesium.Cartesian2(10, -10),
+      0.45,
+      2500000,
+      new Cesium.NearFarScalar(1000, 0.85, 2000000, 0.55),
+    ),
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.65,
+        color: blueMissileColor,
+      }),
+      width: 2.5,
+      leadTime: 0,
+      trailTime: 38,
+    },
+  })
+
   const blueBasePosition = Cesium.Cartesian3.fromDegrees(BLUE_BASE.lon, BLUE_BASE.lat, BLUE_BASE.alt)
   const redBasePosition = Cesium.Cartesian3.fromDegrees(RED_BASE.lon, RED_BASE.lat, RED_BASE.alt)
   const blueEastBasePosition = Cesium.Cartesian3.fromDegrees(
@@ -1085,11 +1321,23 @@ export function loadDemoTrack(handle: ViewerHandle) {
     RED_BASE_WEST.lat,
     RED_BASE_WEST.alt,
   )
-  const interceptPoint = MISSILE_ROUTE_2[MISSILE_ROUTE_2.length - 1]
-  const interceptPosition = Cesium.Cartesian3.fromDegrees(
-    interceptPoint.lon,
-    interceptPoint.lat,
-    interceptPoint.alt,
+  const interceptPoint1 = MISSILE_ROUTE_2[MISSILE_ROUTE_2.length - 1]
+  const interceptPosition1Point = Cesium.Cartesian3.fromDegrees(
+    interceptPoint1.lon,
+    interceptPoint1.lat,
+    interceptPoint1.alt,
+  )
+  const interceptPoint2 = MISSILE_ROUTE_4[MISSILE_ROUTE_4.length - 1]
+  const interceptPosition2Point = Cesium.Cartesian3.fromDegrees(
+    interceptPoint2.lon,
+    interceptPoint2.lat,
+    interceptPoint2.alt,
+  )
+  const blueStrikePoint = BLUE_MISSILE_ROUTE_1[BLUE_MISSILE_ROUTE_1.length - 1]
+  const blueStrikePosition = Cesium.Cartesian3.fromDegrees(
+    blueStrikePoint.lon,
+    blueStrikePoint.lat,
+    blueStrikePoint.alt,
   )
 
   handle.entities.demoEntity = blueLead
@@ -1205,7 +1453,7 @@ export function loadDemoTrack(handle: ViewerHandle) {
 
   addRadarTower(handle, start, {
     id: 'titanium-red-radar-3',
-    position: Cesium.Cartesian3.fromDegrees(121.355, 25.15, 40),
+    position: Cesium.Cartesian3.fromDegrees(121.405, 25.13, 40),
     label: 'RADAR-R3',
     color: redAlphaColor,
     radius: 760,
@@ -1214,7 +1462,7 @@ export function loadDemoTrack(handle: ViewerHandle) {
 
   addRadarTower(handle, start, {
     id: 'titanium-red-radar-4',
-    position: Cesium.Cartesian3.fromDegrees(121.33, 25.12, 40),
+    position: Cesium.Cartesian3.fromDegrees(121.39, 25.105, 40),
     label: 'RADAR-R4',
     color: redNodeColor,
     radius: 720,
@@ -1258,7 +1506,7 @@ export function loadDemoTrack(handle: ViewerHandle) {
 
   addLauncher(handle, {
     id: 'titanium-red-launcher-3',
-    position: Cesium.Cartesian3.fromDegrees(121.36, 25.14, 0),
+    position: Cesium.Cartesian3.fromDegrees(121.41, 25.12, 0),
     label: 'LAUNCHER-03',
     color: redAlphaColor,
   })
@@ -1298,6 +1546,18 @@ export function loadDemoTrack(handle: ViewerHandle) {
     color: blueWingColor,
   })
 
+  addShip(handle, start, RED_SHIP_ROUTE_ALPHA, {
+    id: 'titanium-ship-red-alpha',
+    label: 'RED FLEET-01',
+    color: redAlphaColor,
+  })
+
+  addShip(handle, start, RED_SHIP_ROUTE_BRAVO, {
+    id: 'titanium-ship-red-bravo',
+    label: 'RED FLEET-02',
+    color: redBravoColor,
+  })
+
   addExplosionEffect(handle, start, {
     id: 'titanium-impact',
     position: blueBasePosition,
@@ -1307,7 +1567,7 @@ export function loadDemoTrack(handle: ViewerHandle) {
 
   addExplosionEffect(handle, start, {
     id: 'titanium-intercept',
-    position: interceptPosition,
+    position: interceptPosition1Point,
     impactSeconds: getRouteEnd(MISSILE_ROUTE_2),
     color: blueMissileColor,
   })
@@ -1317,6 +1577,27 @@ export function loadDemoTrack(handle: ViewerHandle) {
     position: blueSouthBasePosition,
     impactSeconds: getRouteEnd(MISSILE_ROUTE_3),
     color: impactColor,
+  })
+
+  addExplosionEffect(handle, start, {
+    id: 'titanium-intercept-2',
+    position: interceptPosition2Point,
+    impactSeconds: getRouteEnd(MISSILE_ROUTE_4),
+    color: blueMissileColor,
+  })
+
+  addExplosionEffect(handle, start, {
+    id: 'titanium-impact-east',
+    position: blueEastBasePosition,
+    impactSeconds: getRouteEnd(MISSILE_ROUTE_5),
+    color: impactColor,
+  })
+
+  addExplosionEffect(handle, start, {
+    id: 'titanium-blue-strike',
+    position: blueStrikePosition,
+    impactSeconds: getRouteEnd(BLUE_MISSILE_ROUTE_1),
+    color: blueMissileColor,
   })
 
   setClockConfig(handle, {
