@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import type { StylizationConfig } from '../../cesium'
+import type { EnemyPaletteKey, StylizationConfig } from '../../cesium'
 import { Panel } from '../components/Panel'
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
@@ -9,6 +9,8 @@ type VisualControlsProps = {
   disabled?: boolean
   config: StylizationConfig
   onChange: (config: StylizationConfig) => void
+  enemyPalette: EnemyPaletteKey
+  onEnemyPaletteChange: (palette: EnemyPaletteKey) => void
   className?: string
   style?: CSSProperties
 }
@@ -34,9 +36,18 @@ function ToggleButton({ label, checked, disabled, onToggle }: ToggleButtonProps)
   )
 }
 
-export function VisualControls({ disabled, config, onChange, className, style }: VisualControlsProps) {
+export function VisualControls({
+  disabled,
+  config,
+  onChange,
+  enemyPalette,
+  onEnemyPaletteChange,
+  className,
+  style,
+}: VisualControlsProps) {
   const edgeDisabled = disabled || !config.enabled
   const toonDisabled = disabled || !config.enabled
+  const enemySwatch = enemyPalette === 'red' ? '#ff4d66' : '#ff8a3d'
 
   return (
     <Panel className={cn('flex flex-col gap-3 px-4 py-3', className)} style={style}>
@@ -73,6 +84,22 @@ export function VisualControls({ disabled, config, onChange, className, style }:
             })
           }
         />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-white/60">Enemy palette</span>
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: enemySwatch }} />
+          <select
+            className="ti-select text-xs"
+            value={enemyPalette}
+            onChange={(event) => onEnemyPaletteChange(event.target.value as EnemyPaletteKey)}
+            disabled={disabled}
+          >
+            <option value="red">Red</option>
+            <option value="orange">Orange</option>
+          </select>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">

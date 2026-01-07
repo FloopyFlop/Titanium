@@ -1,5 +1,5 @@
 import * as Cesium from 'cesium'
-import type { ViewerHandle } from './types'
+import type { EnemyPaletteKey, ViewerHandle } from './types'
 import { setClockConfig } from './timeline'
 
 type RoutePoint = {
@@ -100,14 +100,38 @@ const RED_NODES = [
 const markerStroke = '#0b111b'
 const labelStroke = Cesium.Color.fromCssColorString(markerStroke)
 
-const blueLeadColor = Cesium.Color.fromCssColorString('#7ce7ff')
-const blueWingColor = Cesium.Color.fromCssColorString('#7a5cff')
-const blueNodeColor = Cesium.Color.fromCssColorString('#4fd2ff')
-const redAlphaColor = Cesium.Color.fromCssColorString('#ff4d66')
-const redBravoColor = Cesium.Color.fromCssColorString('#ff9a5c')
-const redNodeColor = Cesium.Color.fromCssColorString('#ff8b5c')
-const missileColor = Cesium.Color.fromCssColorString('#ff2d55')
-const impactColor = Cesium.Color.fromCssColorString('#ff6f3d')
+const blueLeadColor = Cesium.Color.fromCssColorString('#6bdcff')
+const blueWingColor = Cesium.Color.fromCssColorString('#3ab4ff')
+const blueNodeColor = Cesium.Color.fromCssColorString('#46c4ff')
+
+type EnemyPalette = {
+  primary: Cesium.Color
+  secondary: Cesium.Color
+  node: Cesium.Color
+  missile: Cesium.Color
+  impact: Cesium.Color
+}
+
+const ENEMY_PALETTES: Record<EnemyPaletteKey, EnemyPalette> = {
+  red: {
+    primary: Cesium.Color.fromCssColorString('#ff4d66'),
+    secondary: Cesium.Color.fromCssColorString('#ff7a6b'),
+    node: Cesium.Color.fromCssColorString('#ff5f57'),
+    missile: Cesium.Color.fromCssColorString('#ff2d55'),
+    impact: Cesium.Color.fromCssColorString('#ff8b5a'),
+  },
+  orange: {
+    primary: Cesium.Color.fromCssColorString('#ff8a3d'),
+    secondary: Cesium.Color.fromCssColorString('#ffb468'),
+    node: Cesium.Color.fromCssColorString('#ff9b4a'),
+    missile: Cesium.Color.fromCssColorString('#ff6a2d'),
+    impact: Cesium.Color.fromCssColorString('#ffb25a'),
+  },
+}
+
+let enemyPaletteKey: EnemyPaletteKey = 'red'
+
+const getEnemyPalette = () => ENEMY_PALETTES[enemyPaletteKey]
 
 const buildPositionProperty = (route: RoutePoint[], start: Cesium.JulianDate) => {
   const position = new Cesium.SampledPositionProperty()
@@ -239,6 +263,25 @@ const addBaseStation = (
     const wave = 0.5 + 0.5 * Math.sin(seconds * options.pulseRate)
     return options.color.withAlpha(0.12 + wave * 0.18, result)
   }, false)
+
+  const baseHeight = 180
+  const baseCartographic = Cesium.Cartographic.fromCartesian(options.position)
+  const baseCenter = Cesium.Cartesian3.fromRadians(
+    baseCartographic.longitude,
+    baseCartographic.latitude,
+    baseCartographic.height + baseHeight / 2,
+  )
+
+  handle.viewer.entities.add({
+    id: `${options.id}-pillar`,
+    position: baseCenter,
+    cylinder: {
+      length: baseHeight,
+      topRadius: 10,
+      bottomRadius: 18,
+      material: options.ringColor.withAlpha(0.7),
+    },
+  })
 
   handle.viewer.entities.add({
     id: options.id,
@@ -420,37 +463,6 @@ const addGroundConvoy = (
   })
 }
 
-const addTrackingBeam = (
-  handle: ViewerHandle,
-  options: {
-    id: string
-    source: Cesium.Cartesian3
-    target: Cesium.PositionProperty
-    color: Cesium.Color
-    dashLength: number
-  },
-) => {
-  const scratch = new Cesium.Cartesian3()
-
-  handle.viewer.entities.add({
-    id: options.id,
-    polyline: {
-      positions: new Cesium.CallbackProperty((time) => {
-        const targetPosition = options.target.getValue(time, scratch)
-        if (!targetPosition) {
-          return [options.source, options.source]
-        }
-        return [options.source, targetPosition]
-      }, false),
-      width: 1.6,
-      material: new Cesium.PolylineDashMaterialProperty({
-        color: options.color.withAlpha(0.6),
-        dashLength: options.dashLength,
-      }),
-    },
-  })
-}
-
 const addExplosionEffect = (
   handle: ViewerHandle,
   start: Cesium.JulianDate,
@@ -569,6 +581,12 @@ const addExplosionEffect = (
 
 export function loadDemoTrack(handle: ViewerHandle) {
   const start = Cesium.JulianDate.now()
+  const enemyPalette = getEnemyPalette()
+  const redAlphaColor = enemyPalette.primary
+  const redBravoColor = enemyPalette.secondary
+  const redNodeColor = enemyPalette.node
+  const missileColor = enemyPalette.missile
+  const impactColor = enemyPalette.impact
   const routes = [
     BLUE_LEAD_ROUTE,
     BLUE_WING_ROUTE,
@@ -846,22 +864,6 @@ export function loadDemoTrack(handle: ViewerHandle) {
     dash: true,
   })
 
-  addTrackingBeam(handle, {
-    id: 'titanium-blue-tracker',
-    source: blueBasePosition,
-    target: blueLeadPosition,
-    color: blueLeadColor,
-    dashLength: 10,
-  })
-
-  addTrackingBeam(handle, {
-    id: 'titanium-red-tracker',
-    source: redBasePosition,
-    target: redAlphaPosition,
-    color: redAlphaColor,
-    dashLength: 12,
-  })
-
   addExplosionEffect(handle, start, {
     id: 'titanium-impact',
     position: blueBasePosition,
@@ -878,5 +880,43 @@ export function loadDemoTrack(handle: ViewerHandle) {
   })
 
   handle.viewer.trackedEntity = undefined
+  handle.config.enemyPalette = enemyPaletteKey
   handle.viewer.zoomTo(handle.viewer.entities)
+}
+
+export function setEnemyPalette(handle: ViewerHandle, palette: EnemyPaletteKey) {
+  if (enemyPaletteKey === palette) {
+    handle.config.enemyPalette = palette
+    return
+  }
+
+  const start = handle.config.clock.start
+  const currentSeconds = start ? Cesium.JulianDate.secondsDifference(handle.viewer.clock.currentTime, start) : 0
+  const multiplier = handle.viewer.clock.multiplier
+  const isPlaying = handle.viewer.clock.shouldAnimate
+  const wasTracking = Boolean(handle.viewer.trackedEntity)
+
+  enemyPaletteKey = palette
+  handle.viewer.entities.removeAll()
+  loadDemoTrack(handle)
+
+  handle.viewer.clock.multiplier = multiplier
+  handle.viewer.clock.shouldAnimate = isPlaying
+
+  if (handle.config.clock.start && handle.config.clock.stop) {
+    const totalSeconds = Cesium.JulianDate.secondsDifference(handle.config.clock.stop, handle.config.clock.start)
+    const clampedSeconds = Math.min(Math.max(currentSeconds, 0), totalSeconds)
+    handle.viewer.clock.currentTime = Cesium.JulianDate.addSeconds(
+      handle.config.clock.start,
+      clampedSeconds,
+      new Cesium.JulianDate(),
+    )
+  }
+
+  if (wasTracking && handle.entities.demoEntity) {
+    handle.viewer.trackedEntity = handle.entities.demoEntity
+  }
+
+  handle.config.enemyPalette = palette
+  handle.viewer.scene.requestRender()
 }

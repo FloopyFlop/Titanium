@@ -17,6 +17,7 @@ export type ViewerHandle = {
       stop?: JulianDate
     }
     stylization?: StylizationConfig
+    enemyPalette?: EnemyPaletteKey
   }
 }
 
@@ -36,6 +37,8 @@ export type ClockConfig = {
 }
 
 export type SceneMode = '3D' | '2D' | 'COLUMBUS'
+
+export type EnemyPaletteKey = 'red' | 'orange'
 
 export type StylizationConfig = {
   enabled: boolean

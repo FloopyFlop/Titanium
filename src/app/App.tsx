@@ -8,6 +8,7 @@ import {
   loadDemoTrack,
   nudgeTime,
   seekTime,
+  setEnemyPalette,
   setPlaybackState,
   setSceneMode,
   setSpeed,
@@ -15,7 +16,7 @@ import {
   setTrackEntity,
   resetNorth,
 } from '../cesium'
-import type { ClockState, SceneMode, StylizationConfig, ViewerHandle } from '../cesium'
+import type { ClockState, EnemyPaletteKey, SceneMode, StylizationConfig, ViewerHandle } from '../cesium'
 import { CameraControls } from '../ui/controls/CameraControls'
 import { PlaybackControls } from '../ui/controls/PlaybackControls'
 import { SceneControls } from '../ui/controls/SceneControls'
@@ -50,6 +51,7 @@ export default function App() {
   const [isTracking, setIsTracking] = useState(false)
   const [sceneMode, setSceneModeState] = useState<SceneMode>('3D')
   const [stylization, setStylization] = useState<StylizationConfig>(defaultStylization)
+  const [enemyPalette, setEnemyPaletteState] = useState<EnemyPaletteKey>('red')
 
   useEffect(() => {
     if (!viewerRef.current) {
@@ -89,6 +91,13 @@ export default function App() {
     }
     setStylizationConfig(viewerHandle, stylization)
   }, [viewerHandle, stylization])
+
+  useEffect(() => {
+    if (!viewerHandle) {
+      return
+    }
+    setEnemyPalette(viewerHandle, enemyPalette)
+  }, [viewerHandle, enemyPalette])
 
   const controlsDisabled = !viewerHandle || clockState.totalSeconds === 0
 
@@ -174,6 +183,8 @@ export default function App() {
           disabled={controlsDisabled}
           config={stylization}
           onChange={setStylization}
+          enemyPalette={enemyPalette}
+          onEnemyPaletteChange={setEnemyPaletteState}
           className="ti-animate-rise"
           style={{ animationDelay: '430ms' }}
         />
