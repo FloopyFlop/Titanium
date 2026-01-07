@@ -2,6 +2,8 @@
 
 A sleek UI + visual layer for Cesium.js.
 
+![Titanium demo](imgs/image.png)
+
 ## Demo highlights
 - Blue vs red/orange air activity with mixed solid and dotted trails
 - Multiple base stations with pulsing rings and rotating radar sweeps
