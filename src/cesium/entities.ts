@@ -73,6 +73,61 @@ const MISSILE_ROUTE: RoutePoint[] = [
   { seconds: 200, lat: 25.033, lon: 121.5654, alt: 150 },
 ]
 
+const MISSILE_ROUTE_2: RoutePoint[] = [
+  { seconds: 240, lat: 25.145, lon: 121.35, alt: 0 },
+  { seconds: 255, lat: 25.11, lon: 121.45, alt: 900 },
+  { seconds: 265, lat: 25.08, lon: 121.54, alt: 1500 },
+  { seconds: 270, lat: 25.06, lon: 121.6, alt: 1300 },
+]
+
+const INTERCEPT_ROUTE_1: RoutePoint[] = [
+  { seconds: 258, lat: 25.02, lon: 121.72, alt: 0 },
+  { seconds: 266, lat: 25.04, lon: 121.67, alt: 900 },
+  { seconds: 270, lat: 25.06, lon: 121.6, alt: 1300 },
+]
+
+const MISSILE_ROUTE_3: RoutePoint[] = [
+  { seconds: 330, lat: 25.091, lon: 121.49, alt: 0 },
+  { seconds: 345, lat: 25.05, lon: 121.52, alt: 900 },
+  { seconds: 360, lat: 25.02, lon: 121.54, alt: 1200 },
+  { seconds: 380, lat: 24.99, lon: 121.55, alt: 600 },
+  { seconds: 395, lat: 24.96, lon: 121.55, alt: 150 },
+]
+
+const SHIP_ROUTE_ALPHA: RoutePoint[] = [
+  { seconds: 0, lat: 25.02, lon: 121.72, alt: 0 },
+  { seconds: 180, lat: 25.05, lon: 121.78, alt: 0 },
+  { seconds: 360, lat: 25.08, lon: 121.82, alt: 0 },
+]
+
+const SHIP_ROUTE_BRAVO: RoutePoint[] = [
+  { seconds: 40, lat: 24.98, lon: 121.7, alt: 0 },
+  { seconds: 220, lat: 25.0, lon: 121.76, alt: 0 },
+  { seconds: 400, lat: 25.02, lon: 121.8, alt: 0 },
+]
+
+const SHIP_ROUTE_CHARLIE: RoutePoint[] = [
+  { seconds: 80, lat: 25.11, lon: 121.68, alt: 0 },
+  { seconds: 260, lat: 25.13, lon: 121.73, alt: 0 },
+  { seconds: 440, lat: 25.15, lon: 121.78, alt: 0 },
+]
+
+const SCENARIO_ROUTES: RoutePoint[][] = [
+  BLUE_LEAD_ROUTE,
+  BLUE_WING_ROUTE,
+  RED_ALPHA_ROUTE,
+  RED_BRAVO_ROUTE,
+  BLUE_GROUND_ROUTE,
+  RED_GROUND_ROUTE,
+  MISSILE_ROUTE,
+  MISSILE_ROUTE_2,
+  INTERCEPT_ROUTE_1,
+  MISSILE_ROUTE_3,
+  SHIP_ROUTE_ALPHA,
+  SHIP_ROUTE_BRAVO,
+  SHIP_ROUTE_CHARLIE,
+]
+
 const BLUE_BASE = {
   lat: 25.033,
   lon: 121.5654,
@@ -82,6 +137,24 @@ const BLUE_BASE = {
 const RED_BASE = {
   lat: 25.091,
   lon: 121.49,
+  alt: 0,
+}
+
+const BLUE_BASE_EAST = {
+  lat: 25.02,
+  lon: 121.72,
+  alt: 0,
+}
+
+const BLUE_BASE_SOUTH = {
+  lat: 24.96,
+  lon: 121.55,
+  alt: 0,
+}
+
+const RED_BASE_WEST = {
+  lat: 25.145,
+  lon: 121.35,
   alt: 0,
 }
 
@@ -97,12 +170,37 @@ const RED_NODES = [
   { lat: 25.075, lon: 121.44, alt: 0, label: 'RED-03' },
 ]
 
+const SCENARIO_ANCHORS = [
+  BLUE_BASE,
+  RED_BASE,
+  BLUE_BASE_EAST,
+  BLUE_BASE_SOUTH,
+  RED_BASE_WEST,
+  ...BLUE_NODES,
+  ...RED_NODES,
+  { lat: 25.045, lon: 121.552 },
+  { lat: 25.058, lon: 121.58 },
+  { lat: 25.098, lon: 121.474 },
+  { lat: 25.082, lon: 121.46 },
+  { lat: 25.032, lon: 121.705 },
+  { lat: 24.975, lon: 121.545 },
+  { lat: 25.15, lon: 121.355 },
+  { lat: 25.12, lon: 121.33 },
+  { lat: 25.088, lon: 121.482 },
+  { lat: 25.095, lon: 121.498 },
+  { lat: 25.02, lon: 121.548 },
+  { lat: 25.015, lon: 121.715 },
+  { lat: 24.95, lon: 121.55 },
+  { lat: 25.14, lon: 121.36 },
+]
+
 const markerStroke = '#0b111b'
 const labelStroke = Cesium.Color.fromCssColorString(markerStroke)
 
 const blueLeadColor = Cesium.Color.fromCssColorString('#6bdcff')
 const blueWingColor = Cesium.Color.fromCssColorString('#3ab4ff')
 const blueNodeColor = Cesium.Color.fromCssColorString('#46c4ff')
+const blueMissileColor = Cesium.Color.fromCssColorString('#5bb9ff')
 
 type EnemyPalette = {
   primary: Cesium.Color
@@ -153,6 +251,38 @@ const buildPositionProperty = (route: RoutePoint[], start: Cesium.JulianDate) =>
 const getRouteStart = (route: RoutePoint[]) => route[0]?.seconds ?? 0
 
 const getRouteEnd = (route: RoutePoint[]) => route[route.length - 1]?.seconds ?? 0
+
+const buildScenarioRectangle = () => {
+  let minLon = Number.POSITIVE_INFINITY
+  let maxLon = Number.NEGATIVE_INFINITY
+  let minLat = Number.POSITIVE_INFINITY
+  let maxLat = Number.NEGATIVE_INFINITY
+
+  const pushPoint = (lat: number, lon: number) => {
+    minLon = Math.min(minLon, lon)
+    maxLon = Math.max(maxLon, lon)
+    minLat = Math.min(minLat, lat)
+    maxLat = Math.max(maxLat, lat)
+  }
+
+  SCENARIO_ROUTES.forEach((route) => {
+    route.forEach((point) => pushPoint(point.lat, point.lon))
+  })
+
+  SCENARIO_ANCHORS.forEach((point) => pushPoint(point.lat, point.lon))
+
+  if (!Number.isFinite(minLon) || !Number.isFinite(minLat)) {
+    return null
+  }
+
+  const padding = 0.18
+  return Cesium.Rectangle.fromDegrees(
+    minLon - padding,
+    minLat - padding,
+    maxLon + padding,
+    maxLat + padding,
+  )
+}
 
 const createPoint = (color: Cesium.Color, size: number, distance: number) => ({
   pixelSize: size,
@@ -463,6 +593,58 @@ const addGroundConvoy = (
   })
 }
 
+const addShip = (
+  handle: ViewerHandle,
+  start: Cesium.JulianDate,
+  route: RoutePoint[],
+  options: {
+    id: string
+    label: string
+    color: Cesium.Color
+  },
+) => {
+  const position = buildPositionProperty(route, start)
+  const stop = Cesium.JulianDate.addSeconds(start, getRouteEnd(route), new Cesium.JulianDate())
+
+  handle.viewer.entities.add({
+    id: options.id,
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start,
+        stop,
+      }),
+    ]),
+    position,
+    orientation: new Cesium.VelocityOrientationProperty(position),
+    point: createPoint(options.color, 6, 5000000),
+    label: {
+      text: options.label,
+      font: '10px "Space Grotesk"',
+      fillColor: options.color,
+      outlineColor: labelStroke,
+      outlineWidth: 1,
+      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+      pixelOffset: new Cesium.Cartesian2(8, -12),
+      horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+      showBackground: true,
+      backgroundColor: labelStroke.withAlpha(0.4),
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 5000000),
+      scaleByDistance: new Cesium.NearFarScalar(1500, 1.0, 5000000, 0.5),
+      disableDepthTestDistance: Number.POSITIVE_INFINITY,
+    },
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.2,
+        color: options.color.withAlpha(0.7),
+      }),
+      width: 2,
+      leadTime: 0,
+      trailTime: 240,
+    },
+  })
+}
+
 const addExplosionEffect = (
   handle: ViewerHandle,
   start: Cesium.JulianDate,
@@ -587,16 +769,7 @@ export function loadDemoTrack(handle: ViewerHandle) {
   const redNodeColor = enemyPalette.node
   const missileColor = enemyPalette.missile
   const impactColor = enemyPalette.impact
-  const routes = [
-    BLUE_LEAD_ROUTE,
-    BLUE_WING_ROUTE,
-    RED_ALPHA_ROUTE,
-    RED_BRAVO_ROUTE,
-    BLUE_GROUND_ROUTE,
-    RED_GROUND_ROUTE,
-    MISSILE_ROUTE,
-  ]
-  const totalSeconds = Math.max(...routes.map(getRouteEnd))
+  const totalSeconds = Math.max(...SCENARIO_ROUTES.map(getRouteEnd))
   const stop = Cesium.JulianDate.addSeconds(start, totalSeconds, new Cesium.JulianDate())
 
   const blueLeadPosition = buildPositionProperty(BLUE_LEAD_ROUTE, start)
@@ -604,6 +777,9 @@ export function loadDemoTrack(handle: ViewerHandle) {
   const redAlphaPosition = buildPositionProperty(RED_ALPHA_ROUTE, start)
   const redBravoPosition = buildPositionProperty(RED_BRAVO_ROUTE, start)
   const missilePosition = buildPositionProperty(MISSILE_ROUTE, start)
+  const missilePosition2 = buildPositionProperty(MISSILE_ROUTE_2, start)
+  const interceptPosition1 = buildPositionProperty(INTERCEPT_ROUTE_1, start)
+  const missilePosition3 = buildPositionProperty(MISSILE_ROUTE_3, start)
 
   const availability = new Cesium.TimeIntervalCollection([
     new Cesium.TimeInterval({
@@ -763,8 +939,158 @@ export function loadDemoTrack(handle: ViewerHandle) {
     },
   })
 
+  const missileStart2 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteStart(MISSILE_ROUTE_2),
+    new Cesium.JulianDate(),
+  )
+  const missileStop2 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteEnd(MISSILE_ROUTE_2),
+    new Cesium.JulianDate(),
+  )
+
+  handle.viewer.entities.add({
+    id: 'titanium-missile-2',
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start: missileStart2,
+        stop: missileStop2,
+      }),
+    ]),
+    position: missilePosition2,
+    orientation: new Cesium.VelocityOrientationProperty(missilePosition2),
+    point: createPoint(missileColor, 6, 2500000),
+    label: createFlightLabel(
+      'M2 | SPARROW',
+      '11px "Space Grotesk"',
+      missileColor,
+      new Cesium.Cartesian2(10, -10),
+      0.45,
+      2500000,
+      new Cesium.NearFarScalar(1000, 0.85, 2000000, 0.55),
+    ),
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.6,
+        color: missileColor,
+      }),
+      width: 2.5,
+      leadTime: 0,
+      trailTime: 40,
+    },
+  })
+
+  const interceptStart1 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteStart(INTERCEPT_ROUTE_1),
+    new Cesium.JulianDate(),
+  )
+  const interceptStop1 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteEnd(INTERCEPT_ROUTE_1),
+    new Cesium.JulianDate(),
+  )
+
+  handle.viewer.entities.add({
+    id: 'titanium-interceptor-1',
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start: interceptStart1,
+        stop: interceptStop1,
+      }),
+    ]),
+    position: interceptPosition1,
+    orientation: new Cesium.VelocityOrientationProperty(interceptPosition1),
+    point: createPoint(blueMissileColor, 6, 2500000),
+    label: createFlightLabel(
+      'I1 | GUARD',
+      '11px "Space Grotesk"',
+      blueMissileColor,
+      new Cesium.Cartesian2(10, -10),
+      0.45,
+      2500000,
+      new Cesium.NearFarScalar(1000, 0.85, 2000000, 0.55),
+    ),
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.65,
+        color: blueMissileColor,
+      }),
+      width: 2.5,
+      leadTime: 0,
+      trailTime: 36,
+    },
+  })
+
+  const missileStart3 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteStart(MISSILE_ROUTE_3),
+    new Cesium.JulianDate(),
+  )
+  const missileStop3 = Cesium.JulianDate.addSeconds(
+    start,
+    getRouteEnd(MISSILE_ROUTE_3),
+    new Cesium.JulianDate(),
+  )
+
+  handle.viewer.entities.add({
+    id: 'titanium-missile-3',
+    availability: new Cesium.TimeIntervalCollection([
+      new Cesium.TimeInterval({
+        start: missileStart3,
+        stop: missileStop3,
+      }),
+    ]),
+    position: missilePosition3,
+    orientation: new Cesium.VelocityOrientationProperty(missilePosition3),
+    point: createPoint(missileColor, 6, 2500000),
+    label: createFlightLabel(
+      'M3 | LANCER',
+      '11px "Space Grotesk"',
+      missileColor,
+      new Cesium.Cartesian2(10, -10),
+      0.45,
+      2500000,
+      new Cesium.NearFarScalar(1000, 0.85, 2000000, 0.55),
+    ),
+    path: {
+      resolution: 1,
+      material: new Cesium.PolylineGlowMaterialProperty({
+        glowPower: 0.6,
+        color: missileColor,
+      }),
+      width: 2.5,
+      leadTime: 0,
+      trailTime: 45,
+    },
+  })
+
   const blueBasePosition = Cesium.Cartesian3.fromDegrees(BLUE_BASE.lon, BLUE_BASE.lat, BLUE_BASE.alt)
   const redBasePosition = Cesium.Cartesian3.fromDegrees(RED_BASE.lon, RED_BASE.lat, RED_BASE.alt)
+  const blueEastBasePosition = Cesium.Cartesian3.fromDegrees(
+    BLUE_BASE_EAST.lon,
+    BLUE_BASE_EAST.lat,
+    BLUE_BASE_EAST.alt,
+  )
+  const blueSouthBasePosition = Cesium.Cartesian3.fromDegrees(
+    BLUE_BASE_SOUTH.lon,
+    BLUE_BASE_SOUTH.lat,
+    BLUE_BASE_SOUTH.alt,
+  )
+  const redWestBasePosition = Cesium.Cartesian3.fromDegrees(
+    RED_BASE_WEST.lon,
+    RED_BASE_WEST.lat,
+    RED_BASE_WEST.alt,
+  )
+  const interceptPoint = MISSILE_ROUTE_2[MISSILE_ROUTE_2.length - 1]
+  const interceptPosition = Cesium.Cartesian3.fromDegrees(
+    interceptPoint.lon,
+    interceptPoint.lat,
+    interceptPoint.alt,
+  )
 
   handle.entities.demoEntity = blueLead
 
@@ -788,6 +1114,39 @@ export function loadDemoTrack(handle: ViewerHandle) {
     pulseRate: 1.25,
     pulseBase: 320,
     pulseSpread: 220,
+  })
+
+  addBaseStation(handle, start, {
+    id: 'titanium-blue-east',
+    position: blueEastBasePosition,
+    label: 'COASTAL NODE',
+    color: blueNodeColor,
+    ringColor: blueWingColor,
+    pulseRate: 1.35,
+    pulseBase: 300,
+    pulseSpread: 210,
+  })
+
+  addBaseStation(handle, start, {
+    id: 'titanium-blue-south',
+    position: blueSouthBasePosition,
+    label: 'SOUTH RIDGE',
+    color: blueNodeColor,
+    ringColor: blueLeadColor,
+    pulseRate: 1.2,
+    pulseBase: 280,
+    pulseSpread: 190,
+  })
+
+  addBaseStation(handle, start, {
+    id: 'titanium-red-west',
+    position: redWestBasePosition,
+    label: 'IRON GATE',
+    color: redNodeColor,
+    ringColor: redAlphaColor,
+    pulseRate: 1.05,
+    pulseBase: 300,
+    pulseSpread: 210,
   })
 
   addRadarTower(handle, start, {
@@ -826,6 +1185,42 @@ export function loadDemoTrack(handle: ViewerHandle) {
     sweepRate: 0.9,
   })
 
+  addRadarTower(handle, start, {
+    id: 'titanium-blue-radar-3',
+    position: Cesium.Cartesian3.fromDegrees(121.705, 25.032, 40),
+    label: 'RADAR-B1',
+    color: blueWingColor,
+    radius: 760,
+    sweepRate: 0.8,
+  })
+
+  addRadarTower(handle, start, {
+    id: 'titanium-blue-radar-4',
+    position: Cesium.Cartesian3.fromDegrees(121.545, 24.975, 40),
+    label: 'RADAR-B2',
+    color: blueNodeColor,
+    radius: 720,
+    sweepRate: 0.65,
+  })
+
+  addRadarTower(handle, start, {
+    id: 'titanium-red-radar-3',
+    position: Cesium.Cartesian3.fromDegrees(121.355, 25.15, 40),
+    label: 'RADAR-R3',
+    color: redAlphaColor,
+    radius: 760,
+    sweepRate: 0.7,
+  })
+
+  addRadarTower(handle, start, {
+    id: 'titanium-red-radar-4',
+    position: Cesium.Cartesian3.fromDegrees(121.33, 25.12, 40),
+    label: 'RADAR-R4',
+    color: redNodeColor,
+    radius: 720,
+    sweepRate: 0.6,
+  })
+
   addLauncher(handle, {
     id: 'titanium-red-launcher-1',
     position: Cesium.Cartesian3.fromDegrees(121.482, 25.088, 0),
@@ -847,6 +1242,27 @@ export function loadDemoTrack(handle: ViewerHandle) {
     color: blueLeadColor,
   })
 
+  addLauncher(handle, {
+    id: 'titanium-blue-launcher-2',
+    position: Cesium.Cartesian3.fromDegrees(121.715, 25.015, 0),
+    label: 'DEFENSE-02',
+    color: blueWingColor,
+  })
+
+  addLauncher(handle, {
+    id: 'titanium-blue-launcher-3',
+    position: Cesium.Cartesian3.fromDegrees(121.55, 24.95, 0),
+    label: 'DEFENSE-03',
+    color: blueLeadColor,
+  })
+
+  addLauncher(handle, {
+    id: 'titanium-red-launcher-3',
+    position: Cesium.Cartesian3.fromDegrees(121.36, 25.14, 0),
+    label: 'LAUNCHER-03',
+    color: redAlphaColor,
+  })
+
   addSignalNodes(handle, BLUE_NODES, blueNodeColor, 0.5)
   addSignalNodes(handle, RED_NODES, redNodeColor, 0.45)
 
@@ -864,10 +1280,42 @@ export function loadDemoTrack(handle: ViewerHandle) {
     dash: true,
   })
 
+  addShip(handle, start, SHIP_ROUTE_ALPHA, {
+    id: 'titanium-ship-alpha',
+    label: 'FLEET-01',
+    color: blueNodeColor,
+  })
+
+  addShip(handle, start, SHIP_ROUTE_BRAVO, {
+    id: 'titanium-ship-bravo',
+    label: 'FLEET-02',
+    color: blueLeadColor,
+  })
+
+  addShip(handle, start, SHIP_ROUTE_CHARLIE, {
+    id: 'titanium-ship-charlie',
+    label: 'FLEET-03',
+    color: blueWingColor,
+  })
+
   addExplosionEffect(handle, start, {
     id: 'titanium-impact',
     position: blueBasePosition,
     impactSeconds: getRouteEnd(MISSILE_ROUTE),
+    color: impactColor,
+  })
+
+  addExplosionEffect(handle, start, {
+    id: 'titanium-intercept',
+    position: interceptPosition,
+    impactSeconds: getRouteEnd(MISSILE_ROUTE_2),
+    color: blueMissileColor,
+  })
+
+  addExplosionEffect(handle, start, {
+    id: 'titanium-impact-south',
+    position: blueSouthBasePosition,
+    impactSeconds: getRouteEnd(MISSILE_ROUTE_3),
     color: impactColor,
   })
 
@@ -881,7 +1329,16 @@ export function loadDemoTrack(handle: ViewerHandle) {
 
   handle.viewer.trackedEntity = undefined
   handle.config.enemyPalette = enemyPaletteKey
-  handle.viewer.zoomTo(handle.viewer.entities)
+
+  const scenarioRectangle = buildScenarioRectangle()
+  if (scenarioRectangle) {
+    handle.viewer.camera.flyTo({
+      destination: scenarioRectangle,
+      duration: 0,
+    })
+  } else {
+    handle.viewer.zoomTo(handle.viewer.entities)
+  }
 }
 
 export function setEnemyPalette(handle: ViewerHandle, palette: EnemyPaletteKey) {
