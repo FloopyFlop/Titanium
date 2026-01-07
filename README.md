@@ -23,5 +23,5 @@ npm run preview
 ```
 
 ## Notes
-- Uses OpenStreetMap tiles by default. No API keys required.
+- Uses CARTO dark tiles by default, with automatic fallback to OpenStreetMap. No API keys required.
 - Cesium remains the rendering engine; Titanium wraps UI and control logic.
