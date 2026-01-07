@@ -2,13 +2,12 @@
 
 A sleek UI + visual layer for Cesium.js.
 
-## Milestone 0
-- Cesium Viewer with a time-dynamic demo track
-- Minimal Titanium playback controls (play/pause, speed, jump, rewind/fast-forward)
-- Timeline scrubber with time readout
-- Optional track-entity camera follow
-- Scene mode toggle (3D / 2D / 2.5D)
-- Stylized rendering toggles (toon + edge)
+## Demo highlights
+- Red vs blue air activity with mixed solid and dotted trails
+- Dual base stations with pulsing radar rings and rotating sweeps
+- Missile launch sequence with timed impact flash and shockwave rays
+- Ground convoys, launchers, and tracking beams
+- Minimal Titanium playback + scene controls
 
 ## Local development
 ```bash

@@ -39,7 +39,7 @@ const defaultStylization: StylizationConfig = {
   },
   toon: {
     enabled: true,
-    intensity: 0.75,
+    intensity: 0,
   },
 }
 
