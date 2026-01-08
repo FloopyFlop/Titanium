@@ -21,6 +21,7 @@ import { CameraControls } from '../ui/controls/CameraControls'
 import { PlaybackControls } from '../ui/controls/PlaybackControls'
 import { SceneControls } from '../ui/controls/SceneControls'
 import { Timeline } from '../ui/controls/Timeline'
+import { ViewControls } from '../ui/controls/ViewControls'
 import { VisualControls } from '../ui/controls/VisualControls'
 
 const TIME_NUDGE_SECONDS = 12
@@ -52,6 +53,8 @@ export default function App() {
   const [sceneMode, setSceneModeState] = useState<SceneMode>('3D')
   const [stylization, setStylization] = useState<StylizationConfig>(defaultStylization)
   const [enemyPalette, setEnemyPaletteState] = useState<EnemyPaletteKey>('red')
+  const [showUtilityPanels, setShowUtilityPanels] = useState(true)
+  const [showTimeControls, setShowTimeControls] = useState(true)
 
   useEffect(() => {
     if (!viewerRef.current) {
@@ -113,14 +116,25 @@ export default function App() {
       </div>
 
       <div className="pointer-events-auto absolute bottom-6 left-6 right-6 flex flex-col gap-3 sm:right-auto sm:w-[360px]">
-        <Timeline
-          disabled={controlsDisabled}
-          currentSeconds={clockState.currentSeconds}
-          totalSeconds={clockState.totalSeconds}
-          onScrub={(seconds) => viewerHandle && seekTime(viewerHandle, seconds)}
+        <ViewControls
+          disabled={!viewerHandle}
+          showTimeControls={showTimeControls}
+          showUtilityPanels={showUtilityPanels}
+          onToggleTimeControls={() => setShowTimeControls((prev) => !prev)}
+          onToggleUtilityPanels={() => setShowUtilityPanels((prev) => !prev)}
           className="ti-animate-rise"
-          style={{ animationDelay: '140ms' }}
+          style={{ animationDelay: '110ms' }}
         />
+        {showTimeControls && (
+          <Timeline
+            disabled={controlsDisabled}
+            currentSeconds={clockState.currentSeconds}
+            totalSeconds={clockState.totalSeconds}
+            onScrub={(seconds) => viewerHandle && seekTime(viewerHandle, seconds)}
+            className="ti-animate-rise"
+            style={{ animationDelay: '140ms' }}
+          />
+        )}
         <PlaybackControls
           disabled={controlsDisabled}
           isPlaying={clockState.isPlaying}
@@ -143,51 +157,58 @@ export default function App() {
             setSpeed(viewerHandle, value)
             syncClock()
           }}
+          showSpeed={showTimeControls}
           className="ti-animate-rise"
           style={{ animationDelay: '210ms' }}
         />
-        <CameraControls
-          disabled={controlsDisabled}
-          isTracking={isTracking}
-          onHome={() => viewerHandle && flyHome(viewerHandle)}
-          onResetNorth={() => viewerHandle && resetNorth(viewerHandle)}
-          onToggleTrack={() => {
-            if (!viewerHandle) {
-              return
-            }
-            const next = !isTracking
-            setIsTracking(next)
-            setTrackEntity(viewerHandle, next)
-          }}
-          className="ti-animate-rise"
-          style={{ animationDelay: '280ms' }}
-        />
-        <SceneControls
-          disabled={controlsDisabled}
-          mode={sceneMode}
-          onModeChange={(mode) => {
-            if (!viewerHandle) {
-              return
-            }
-            if (mode !== '3D' && isTracking) {
-              setIsTracking(false)
-              setTrackEntity(viewerHandle, false)
-            }
-            setSceneModeState(mode)
-            setSceneMode(viewerHandle, mode)
-          }}
-          className="ti-animate-rise"
-          style={{ animationDelay: '350ms' }}
-        />
-        <VisualControls
-          disabled={controlsDisabled}
-          config={stylization}
-          onChange={setStylization}
-          enemyPalette={enemyPalette}
-          onEnemyPaletteChange={setEnemyPaletteState}
-          className="ti-animate-rise"
-          style={{ animationDelay: '430ms' }}
-        />
+        {showUtilityPanels && (
+          <CameraControls
+            disabled={controlsDisabled}
+            isTracking={isTracking}
+            onHome={() => viewerHandle && flyHome(viewerHandle)}
+            onResetNorth={() => viewerHandle && resetNorth(viewerHandle)}
+            onToggleTrack={() => {
+              if (!viewerHandle) {
+                return
+              }
+              const next = !isTracking
+              setIsTracking(next)
+              setTrackEntity(viewerHandle, next)
+            }}
+            className="ti-animate-rise"
+            style={{ animationDelay: '280ms' }}
+          />
+        )}
+        {showUtilityPanels && (
+          <SceneControls
+            disabled={controlsDisabled}
+            mode={sceneMode}
+            onModeChange={(mode) => {
+              if (!viewerHandle) {
+                return
+              }
+              if (mode !== '3D' && isTracking) {
+                setIsTracking(false)
+                setTrackEntity(viewerHandle, false)
+              }
+              setSceneModeState(mode)
+              setSceneMode(viewerHandle, mode)
+            }}
+            className="ti-animate-rise"
+            style={{ animationDelay: '350ms' }}
+          />
+        )}
+        {showUtilityPanels && (
+          <VisualControls
+            disabled={controlsDisabled}
+            config={stylization}
+            onChange={setStylization}
+            enemyPalette={enemyPalette}
+            onEnemyPaletteChange={setEnemyPaletteState}
+            className="ti-animate-rise"
+            style={{ animationDelay: '430ms' }}
+          />
+        )}
       </div>
     </AppShell>
   )

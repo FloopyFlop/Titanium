@@ -15,6 +15,7 @@ type PlaybackControlsProps = {
   onNudgeBackward: () => void
   onNudgeForward: () => void
   onSpeedChange: (value: number) => void
+  showSpeed?: boolean
   className?: string
   style?: CSSProperties
 }
@@ -29,6 +30,7 @@ export function PlaybackControls({
   onNudgeBackward,
   onNudgeForward,
   onSpeedChange,
+  showSpeed = true,
   className,
   style,
 }: PlaybackControlsProps) {
@@ -68,23 +70,27 @@ export function PlaybackControls({
         />
       </div>
 
-      <div className="h-6 w-px bg-white/10" />
+      {showSpeed && (
+        <>
+          <div className="h-6 w-px bg-white/10" />
 
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">Speed</span>
-        <select
-          className="ti-select"
-          value={speed}
-          onChange={(event) => onSpeedChange(Number(event.target.value))}
-          disabled={disabled}
-        >
-          {SPEED_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}x
-            </option>
-          ))}
-        </select>
-      </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">Speed</span>
+            <select
+              className="ti-select"
+              value={speed}
+              onChange={(event) => onSpeedChange(Number(event.target.value))}
+              disabled={disabled}
+            >
+              {SPEED_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}x
+                </option>
+              ))}
+            </select>
+          </div>
+        </>
+      )}
     </Panel>
   )
 }
