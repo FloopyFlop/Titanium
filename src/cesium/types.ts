@@ -1,4 +1,4 @@
-import type { Entity, JulianDate, PostProcessStage, Viewer } from 'cesium'
+import type { Entity, JulianDate, PostProcessStage, TimeIntervalCollection, Viewer } from 'cesium'
 
 export type ViewerHandle = {
   viewer: Viewer
@@ -15,6 +15,9 @@ export type ViewerHandle = {
     clock: {
       start?: JulianDate
       stop?: JulianDate
+    }
+    timeline: {
+      markers: TimeIntervalCollection
     }
     stylization?: StylizationConfig
     enemyPalette?: EnemyPaletteKey

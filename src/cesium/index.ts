@@ -1,7 +1,25 @@
 export { initializeViewer, destroyViewer } from './viewer'
 export { loadDemoTrack, setEnemyPalette } from './entities'
-export { setClockConfig, getClockState, setPlaybackState, setSpeed, seekTime, nudgeTime } from './timeline'
+export {
+  setClockConfig,
+  getClockState,
+  setPlaybackState,
+  setSpeed,
+  seekTime,
+  nudgeTime,
+  addTimelineMarker,
+  getTimelineMarkers,
+  setTimelineMarkers,
+} from './timeline'
 export { setSceneMode, flyHome, resetNorth, setTrackEntity } from './camera'
 export { createDefaultImageryProvider, setBaseLayer } from './imagery'
 export { setStylizationConfig } from './postprocess/stylize'
-export type { ClockConfig, ClockState, EnemyPaletteKey, SceneMode, StylizationConfig, ViewerHandle } from './types'
+export type {
+  ClockConfig,
+  ClockState,
+  EnemyPaletteKey,
+  SceneMode,
+  StylizationConfig,
+  ViewerHandle,
+} from './types'
+export type { TimelineMarkerRecord, TimelineMarkerSeed } from './timeline'

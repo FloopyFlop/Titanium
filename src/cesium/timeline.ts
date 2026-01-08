@@ -3,6 +3,25 @@ import type { ClockConfig, ClockState, ViewerHandle } from './types'
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
 
+type TimelineMarkerData = {
+  id?: string
+  label?: string
+  color?: string
+  icon?: string
+}
+
+export type TimelineMarkerSeed = {
+  id: string
+  secondsFromStart: number
+  label?: string
+  color?: string
+  icon?: string
+}
+
+export type TimelineMarkerRecord = TimelineMarkerSeed
+
+const getMarkerCollection = (handle: ViewerHandle) => handle.config.timeline.markers
+
 export function setClockConfig(handle: ViewerHandle, config: ClockConfig) {
   const { viewer } = handle
   viewer.clock.startTime = config.start.clone()
@@ -69,4 +88,67 @@ export function seekTime(handle: ViewerHandle, secondsFromStart: number) {
 export function nudgeTime(handle: ViewerHandle, deltaSeconds: number) {
   const state = getClockState(handle)
   seekTime(handle, state.currentSeconds + deltaSeconds)
+}
+
+export function setTimelineMarkers(handle: ViewerHandle, markers: TimelineMarkerSeed[]) {
+  const collection = getMarkerCollection(handle)
+  collection.removeAll()
+  markers.forEach((marker) => {
+    addTimelineMarker(handle, marker)
+  })
+}
+
+export function addTimelineMarker(handle: ViewerHandle, marker: TimelineMarkerSeed) {
+  const start = handle.config.clock.start
+  const stop = handle.config.clock.stop
+  if (!start) {
+    return
+  }
+
+  const totalSeconds = stop ? Cesium.JulianDate.secondsDifference(stop, start) : undefined
+  const clampedSeconds =
+    typeof totalSeconds === 'number' ? clamp(marker.secondsFromStart, 0, totalSeconds) : marker.secondsFromStart
+
+  const time = Cesium.JulianDate.addSeconds(start, clampedSeconds, new Cesium.JulianDate())
+  const interval = new Cesium.TimeInterval({
+    start: time,
+    stop: Cesium.JulianDate.addSeconds(time, 0.001, new Cesium.JulianDate()),
+    isStartIncluded: true,
+    isStopIncluded: true,
+    data: {
+      id: marker.id,
+      label: marker.label,
+      color: marker.color,
+      icon: marker.icon,
+    } satisfies TimelineMarkerData,
+  })
+
+  getMarkerCollection(handle).addInterval(interval)
+}
+
+export function getTimelineMarkers(handle: ViewerHandle): TimelineMarkerRecord[] {
+  const start = handle.config.clock.start
+  if (!start) {
+    return []
+  }
+
+  const collection = getMarkerCollection(handle)
+  const markers: TimelineMarkerRecord[] = []
+
+  for (let index = 0; index < collection.length; index += 1) {
+    const interval = collection.get(index)
+    if (!interval) {
+      continue
+    }
+    const data = (interval.data ?? {}) as TimelineMarkerData
+    markers.push({
+      id: data.id ?? `marker-${index + 1}`,
+      secondsFromStart: Cesium.JulianDate.secondsDifference(interval.start, start),
+      label: data.label,
+      color: data.color,
+      icon: data.icon,
+    })
+  }
+
+  return markers
 }

@@ -73,6 +73,9 @@ export function initializeViewer(container: HTMLElement): ViewerHandle {
     },
     config: {
       clock: {},
+      timeline: {
+        markers: new Cesium.TimeIntervalCollection(),
+      },
     },
   }
 
